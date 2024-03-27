@@ -1,8 +1,8 @@
 // import necessary modules
 import axios from "axios";
-import url from "node:url";
-import path from "node:path";
-import fs from "node:fs";
+import url from "url";
+import path from "path";
+import fs from "fs";
 
 // in ECMAScript Modules (ESM), __dirname is not available directly like in CommonJS
 // use 'url' and 'path' modules to achieve similar functionality

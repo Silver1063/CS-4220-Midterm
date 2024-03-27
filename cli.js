@@ -1,6 +1,8 @@
 import chalk from "chalk";
 import boxen from "boxen";
 import yargs from "yargs";
+import { hideBin } from 'yargs/helpers';
+
 
 const greeting = chalk.white.bold("GET READY TO LAUNCH SHIT INTO SPACE");
 
@@ -22,7 +24,15 @@ const options = y.usage("Usage: -n <name>").option("n", {
   describe: "Your name",
   type: "string",
   demandOption: true,
-}).argv;
+}).command(
+  'previous',
+  'view the last search history',
+  () => {},
+  () => {
+      previous();
+  }
+)
+.help().argv;
 
 const greeting1 = `Hello, ${options.name}!`;
 
