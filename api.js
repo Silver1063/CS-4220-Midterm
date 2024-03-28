@@ -1,33 +1,30 @@
-// import necessary modules
-import axios from "axios";
-import url from "url";
-import path from "path";
-import fs from "fs";
+import axios from 'axios';
 
-// in ECMAScript Modules (ESM), __dirname is not available directly like in CommonJS
-// use 'url' and 'path' modules to achieve similar functionality
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const base = 'https://lldev.thespacedevs.com/2.2.0';
 
-// Write your getPage function here
-const getPage = async (url) => {
+export async function searchByKeyword(keyword) {
   try {
-    const response = await axios.get(url);
-    writeResults(url, response, "success");
+    // Make separate requests to each relevant endpoint for searching by keyword
+    const [astronautsResponse, launchesResponse, eventsResponse] = await Promise.all([
+      axios.get(`${base}/astronaut/?search=${encodeURIComponent(keyword)}`),
+      axios.get(`${base}/launch/?search=${encodeURIComponent(keyword)}`),
+      axios.get(`${base}/event/?search=${encodeURIComponent(keyword)}`)
+    ]);
+
+    // Extract data from responses
+    const astronauts = astronautsResponse.data;
+    const launches = launchesResponse.data;
+    const events = eventsResponse.data;
+
+    // Combine and format the results from all categories
+    const combinedResults = {
+      astronauts,
+      launches,
+      events
+    };
+
+    return combinedResults;
   } catch (error) {
-    writeResults(url, error.response, "error");
+    throw new Error(`Error searching Launch Library 2 API by keyword: ${error.message}`);
   }
-};
-
-// Write your writeResults function here
-const writeResults = (url, response, type) => {
-  const status = response.status;
-  const body = response.data;
-
-  const output = [url, type, status, body.length, Date.now()].join(" | ");
-
-  fs.appendFile(__dirname + "/result.txt", output + "\n", (err) => {
-    if (err) throw err;
-    console.log('The "data to append" was appended to file!');
-  });
-};
+}

@@ -1,39 +1,43 @@
-import chalk from "chalk";
-import boxen from "boxen";
-import yargs from "yargs";
-import { hideBin } from 'yargs/helpers';
+import { searchByKeyword } from './api.js';
+import { Command } from 'commander';
+
+// Create a new instance of Command
+const program = new Command();
+
+// Define the program description and version
+program
+  .version('1.0.0')
+  .description('CLI tool for searching Launch Library 2 API');
+
+// Add a search command to search based on a keyword
+program
+  .command('search <keyword>')
+  .description('search based on your selected API using a keyword')
+  .action(async (keyword) => {
+    try {
+      const searchResults = await searchByKeyword(keyword);
+      console.log('Search results:');
+      displayResults(searchResults);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  });
 
 
-const greeting = chalk.white.bold("GET READY TO LAUNCH SHIT INTO SPACE");
+// Parse command-line arguments
+program.parse(process.argv);
 
-const boxenOptions = {
-  padding: 1,
-  margin: 1,
-  borderStyle: "round",
-  borderColor: "green",
-  backgroundColor: "#555555",
-};
-const msgBox = boxen(greeting, boxenOptions);
-
-console.log(msgBox);
-
-const y = yargs();
-
-const options = y.usage("Usage: -n <name>").option("n", {
-  alias: "name",
-  describe: "Your name",
-  type: "string",
-  demandOption: true,
-}).command(
-  'previous',
-  'view the last search history',
-  () => {},
-  () => {
-      previous();
+// Function to display search results
+function displayResults(results) {
+  for (const category in results) {
+    if (results.hasOwnProperty(category)) {
+      console.log(`--- ${category.charAt(0).toUpperCase() + category.slice(1)} ---`);
+      console.log(`Count: ${results[category].count}`);
+      console.log('Results:');
+      results[category].results.forEach(result => {
+        console.log(JSON.stringify(result, null, 2));
+      });
+      console.log('\n');
+    }
   }
-)
-.help().argv;
-
-const greeting1 = `Hello, ${options.name}!`;
-
-console.log(greeting1);
+}
