@@ -8,9 +8,8 @@ import { searchByKeyword, getDetailsByID } from "./api.js";
 import { find, create } from "./db.js";
 import { get } from "https";
 
-let cache = false;
 
-export const search = async (keyword) => {
+export const search = async (keyword, cache = false) => {
   // perform initial api search
   const results = await searchByKeyword(keyword);
   const resultCount = results.length;
