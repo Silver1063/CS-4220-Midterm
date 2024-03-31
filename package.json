@@ -1,17 +1,17 @@
 {
-  "name": "cs-4220-midterm",
-  "version": "1.0.0",
-  "description": "A command line application that interacts with the Launch Library 2 api",
-  "main": "app.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Alexandra Barahona, Dexter Kale, Edward Eckle, Justin Guerra, Melissa Hernandez",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^1.6.8",
-    "commander": "^7.2.0",
-    "readline-sync": "^1.4.10"
-  }
+    "name": "cs-4220-midterm",
+    "version": "1.0.0",
+    "description": "A command line application that interacts with the Launch Library 2 api",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Alexandra Barahona, Dexter Kale, Edward Eckle, Justin Guerra, Melissa Hernandez",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^1.6.8",
+        "commander": "^7.2.0",
+        "readline-sync": "^1.4.10"
+    }
 }
