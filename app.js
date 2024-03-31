@@ -8,7 +8,6 @@ import { searchByKeyword, getDetailsByID } from "./api.js";
 import { find, create } from "./db.js";
 import { get } from "https";
 
-
 export const search = async (keyword, cache = false) => {
   // perform initial api search
   const results = await searchByKeyword(keyword);
@@ -34,22 +33,83 @@ export const search = async (keyword, cache = false) => {
   }
 
   let selection = 0;
-
   selection = reader.question("Enter your selection: ");
 
+  if (selection < 0 || selection >= resultCount || isNaN(selection)) {
+    console.log("Invalid selection, defaulted to option 0");
+    selection = 0;
+  }
+
   const selected = results[selection];
+  const type = selected.id[0];
+
+  let details = null;
 
   if (cache) {
-    const cache_result = await find("search_cache", id);
-    if (cache_result) {
-    }
-  } else {
-    const details = await getDetailsByID(selected.id);
-
-    const data = { id: selected.id, details: details };
-
-    await create("search_cache", data);
+    details = (await find("search_cache", selected.id)).details;
   }
+
+  if (details == null) {
+    details = await getAndCacheDetails(selected.id);
+    console.log("Details retrieved from api...");
+  } else {
+    console.log("Details retrieved from cache...");
+  }
+
+  switch (type) {
+    case "a":
+      displayAstronautDetails(details);
+      break;
+    case "l":
+      displayLaunchDetails(details);
+      break;
+    case "e":
+      displayEventDetails(details);
+      break;
+  }
+};
+
+const getAndCacheDetails = async (id) => {
+  const details = await getDetailsByID(id);
+  const data = { id: id, details: details };
+  await create("search_cache", data);
+  return details;
+};
+
+const displayAstronautDetails = (details) => {
+  console.log("----------- Astronaut Details -----------");
+  console.log("    Name:                ", details.name);
+  console.log("    Age:                 ", details.age);
+  console.log("    Date of Birth:       ", details.date_of_birth);
+  console.log("    Agency:              ", details.agency.name);
+  console.log("    Currently in space:  ", details.in_space);
+  console.log("    Biography:");
+  console.log(details.bio);
+  //console.log(details.Error);
+};
+
+const displayLaunchDetails = (details) => {
+  console.log("----------- Launch Details -----------");
+  console.log("    Launch Name:         ", details.name);
+  console.log("    Launch Status:       ", details.status.name);
+  console.log("    Launch Description:");
+  console.log(details.status.description);
+  console.log("    Rocket Name:         ", details.rocket.configuration.name);
+  console.log("    Rocket Description:");
+  console.log(details.rocket.configuration.description);
+  //console.log(details.Error);
+};
+
+const displayEventDetails = (details) => {
+  console.log("----------- Event Details -----------");
+  console.log("    Event Name:          ", details.name);
+  console.log("    Type:                ", details.type.name);
+  console.log("    Location:            ", details.location);
+  console.log("    Video Link:          ", details.video_url);
+  console.log("    News Link:           ", details.news_url);
+  console.log("    Description:");
+  console.log(details.description);
+  //console.log(details.Error);
 };
 
 //--------------------------------------------------------------------------------------------
@@ -96,3 +156,4 @@ const previous = async () => {
 
 //Call the function to display the previous search
 // previous();
+
