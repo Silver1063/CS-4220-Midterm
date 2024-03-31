@@ -85,7 +85,6 @@ const displayAstronautDetails = (details) => {
   console.log("    Currently in space:  ", details.in_space);
   console.log("    Biography:");
   console.log(details.bio);
-  //console.log(details.Error);
 };
 
 const displayLaunchDetails = (details) => {
@@ -97,7 +96,6 @@ const displayLaunchDetails = (details) => {
   console.log("    Rocket Name:         ", details.rocket.configuration.name);
   console.log("    Rocket Description:");
   console.log(details.rocket.configuration.description);
-  //console.log(details.Error);
 };
 
 const displayEventDetails = (details) => {
@@ -109,7 +107,6 @@ const displayEventDetails = (details) => {
   console.log("    News Link:           ", details.news_url);
   console.log("    Description:");
   console.log(details.description);
-  //console.log(details.Error);
 };
 
 //--------------------------------------------------------------------------------------------
@@ -156,4 +153,3 @@ const previous = async () => {
 
 //Call the function to display the previous search
 // previous();
-
