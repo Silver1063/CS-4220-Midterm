@@ -24,7 +24,7 @@ export const search = async (keyword, cache = false) => {
     let i = 0;
     for (const result of results) {
         console.log(
-            '  ' + i + ' ' + id_prefix[result.id[0]] + ': ' + result.name
+            '\t' + i + ' ' + id_prefix[result.id[0]] + ': ' + result.name
         );
         i++;
     }
@@ -38,12 +38,12 @@ export const search = async (keyword, cache = false) => {
     }
 
     const selected = results[selection];
-    const type = selected.id[0];
 
     let details = null;
 
     if (cache) {
-        details = (await find('search_cache', selected.id)).details;
+        const result = await find('search_cache', selected.id);
+        if (result) details = result.details;
     }
 
     if (details == null) {
@@ -53,8 +53,7 @@ export const search = async (keyword, cache = false) => {
         console.log('Details retrieved from cache...');
     }
 
-    //console.log(details);
-
+    const type = selected.id[0];
     switch (type) {
         case 'a':
             displayAstronautDetails(details);
