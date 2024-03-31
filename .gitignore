@@ -1,3 +1,5 @@
 node_modules/
 package-lock.json
 tempCodeRunnerFile.js
+mock_database/search_history.json
+mock_database/search_cache.json

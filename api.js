@@ -2,6 +2,7 @@ import axios from "axios";
 
 const base = "https://lldev.thespacedevs.com/2.2.0";
 
+// Returns an array of objects containing the name of the item, and the id
 export const searchByKeyword = async (keyword) => {
   try {
     // Contains results of search, if empty we didn't find anything :(
@@ -20,7 +21,6 @@ export const searchByKeyword = async (keyword) => {
     const events = eventsResponse.data.results;
 
     // need to prepend an identifier to id so we can figure out the correct endpoint later
-    // there is probably a more succinct way to write this but idk this works whatever
     for (const astronaut of astronauts) {
       results.push({
         name: astronaut.name,
@@ -40,37 +40,6 @@ export const searchByKeyword = async (keyword) => {
       });
     }
     return results;
-  } catch (error) {
-    throw new Error(
-      `Error searching Launch Library 2 API by keyword: ${error.message}`
-    );
-  }
-};
-
-// old implementation, left as reference
-export const oldSearchByKeyword = async (keyword) => {
-  try {
-    // Make separate requests to each relevant endpoint for searching by keyword
-    const [astronautsResponse, launchesResponse, eventsResponse] =
-      await Promise.all([
-        axios.get(`${base}/astronaut/?search=${encodeURIComponent(keyword)}`),
-        axios.get(`${base}/launch/?search=${encodeURIComponent(keyword)}`),
-        axios.get(`${base}/event/?search=${encodeURIComponent(keyword)}`),
-      ]);
-
-    // Extract data from responses
-    const astronauts = astronautsResponse.data;
-    const launches = launchesResponse.data;
-    const events = eventsResponse.data;
-
-    // Combine and format the results from all categories
-    const combinedResults = {
-      astronauts,
-      launches,
-      events,
-    };
-
-    return combinedResults;
   } catch (error) {
     throw new Error(
       `Error searching Launch Library 2 API by keyword: ${error.message}`

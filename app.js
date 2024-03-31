@@ -1,12 +1,7 @@
 // import necessary modules
-import axios from "axios";
-import url from "url";
-import path from "path";
-import fs from "fs";
 import reader from "readline-sync";
 import { searchByKeyword, getDetailsByID } from "./api.js";
 import { find, create } from "./db.js";
-import { get } from "https";
 
 export const search = async (keyword, cache = false) => {
   // perform initial api search
@@ -32,9 +27,9 @@ export const search = async (keyword, cache = false) => {
     i++;
   }
 
-  let selection = 0;
-  selection = reader.question("Enter your selection: ");
+  const selection = reader.question("Enter your selection: ");
 
+  // test me
   if (selection < 0 || selection >= resultCount || isNaN(selection)) {
     console.log("Invalid selection, defaulted to option 0");
     selection = 0;
@@ -55,6 +50,8 @@ export const search = async (keyword, cache = false) => {
   } else {
     console.log("Details retrieved from cache...");
   }
+
+  //console.log(details);
 
   switch (type) {
     case "a":
@@ -112,44 +109,19 @@ const displayEventDetails = (details) => {
 //--------------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * Retrieves the previous search from the search history
- * @returns {Promise<Object|null>} the previous search retrieved from the history
- * @throws {Error} an error if there's an issue retrieving the previous search
- */
-const getPreviousSearch = async () => {
+export const history = async () => {
   try {
     const searchHistory = await find("search_history");
-    const previousSearch = searchHistory.pop();
-    return previousSearch;
+    let i = 0;
+    console.log("Search Log Most to Least Recent");
+    for (const search of searchHistory.reverse()) {
+      console.log(
+        `\tSearch ${i++}\tKeyword: ${search.search}\tResult Count: ${
+          search.resultCount
+        }`
+      );
+    }
   } catch (error) {
     throw new Error(`Error retrieving previous search: ${error.message}`);
   }
 };
-
-/**
- * Displays the previous search to the user in a user-friendly format
- * @param {Object|null} previousSearch - the previous search to display
- */
-const displayPreviousSearch = (previousSearch) => {
-  if (!previousSearch) {
-    console.log("No previous search available.");
-  } else {
-    console.log("Previous Search:");
-    console.log(`Search: ${previousSearch.search}`);
-    console.log(`Result Count: ${previousSearch.resultCount}`);
-  }
-};
-
-// Function to handle the previous search logic
-const previous = async () => {
-  try {
-    const previousSearch = await getPreviousSearch();
-    displayPreviousSearch(previousSearch);
-  } catch (error) {
-    console.error(error.message);
-  }
-};
-
-//Call the function to display the previous search
-// previous();

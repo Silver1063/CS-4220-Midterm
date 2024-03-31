@@ -1,4 +1,4 @@
-import { search } from "./app.js";
+import { search, history } from "./app.js";
 import { Command } from "commander";
 
 // Create a new instance of Command
@@ -20,6 +20,18 @@ program
   .action(async (keyword) => {
     try {
       await search(keyword, options.cache);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  });
+
+// History command
+program
+  .command("history")
+  .description("Display the search history")
+  .action(async () => {
+    try {
+      await history();
     } catch (error) {
       console.error("Error:", error.message);
     }
