@@ -1,5 +1,5 @@
 {
-    "name": "cs-4220-midterm",
+    "name": "launch-library-2-cli-search",
     "version": "1.0.0",
     "description": "A command line application that interacts with the Launch Library 2 api",
     "main": "app.js",

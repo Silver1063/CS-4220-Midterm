@@ -7,7 +7,7 @@ const options = program.opts();
 
 // Define the program description and version
 program
-    .version('1.0.0')
+    .version('Launch Library 2 Desktop API Search Tool with Cache 1.0.0')
     .description('CLI tool for searching Launch Library 2 API');
 
 // Add a cache option for searches
@@ -25,7 +25,7 @@ program
         }
     });
 
-// History command
+// Add a history command to display the search history
 program
     .command('history')
     .description('Display the search history')

@@ -29,9 +29,9 @@ export const search = async (keyword, cache = false) => {
         i++;
     }
 
-    const selection = reader.question('Enter your selection: ');
+    // Must be mutable so that we can override bad inputs
+    let selection = reader.question('Enter your selection: ');
 
-    // test me
     if (selection < 0 || selection >= resultCount || isNaN(selection)) {
         console.log('Invalid selection, defaulted to option 0');
         selection = 0;
@@ -77,34 +77,34 @@ const getAndCacheDetails = async (id) => {
 
 const displayAstronautDetails = (details) => {
     console.log('----------- Astronaut Details -----------');
-    console.log('    Name:                ', details.name);
-    console.log('    Age:                 ', details.age);
-    console.log('    Date of Birth:       ', details.date_of_birth);
-    console.log('    Agency:              ', details.agency.name);
-    console.log('    Currently in space:  ', details.in_space);
-    console.log('    Biography:');
+    console.log('\tName:\t\t\t' + details.name);
+    console.log('\tAge:\t\t\t' + details.age);
+    console.log('\tDate of Birth:\t\t' + details.date_of_birth);
+    console.log('\tAgency:\t\t\t' + details.agency.name);
+    console.log('\tCurrently in space:\t' + (details.in_space ? 'Yes' : 'No'));
+    console.log('\tBiography:');
     console.log(details.bio);
 };
 
 const displayLaunchDetails = (details) => {
     console.log('----------- Launch Details -----------');
-    console.log('    Launch Name:         ', details.name);
-    console.log('    Launch Status:       ', details.status.name);
-    console.log('    Launch Description:');
+    console.log('\tLaunch Name:\t' + details.name);
+    console.log('\tLaunch Status:\t' + details.status.name);
+    console.log('\tLaunch Description:');
     console.log(details.status.description);
-    console.log('    Rocket Name:         ', details.rocket.configuration.name);
-    console.log('    Rocket Description:');
+    console.log('\tRocket Name:\t' + details.rocket.configuration.name);
+    console.log('\tRocket Description:');
     console.log(details.rocket.configuration.description);
 };
 
 const displayEventDetails = (details) => {
     console.log('----------- Event Details -----------');
-    console.log('    Event Name:          ', details.name);
-    console.log('    Type:                ', details.type.name);
-    console.log('    Location:            ', details.location);
-    console.log('    Video Link:          ', details.video_url);
-    console.log('    News Link:           ', details.news_url);
-    console.log('    Description:');
+    console.log('\tEvent Name:\t' + details.name);
+    console.log('\tType:\t\t' + details.type.name);
+    console.log('\tLocation:\t' + details.location);
+    console.log('\tVideo Link:\t' + (details.video_url || 'None Provided'));
+    console.log('\tNews Link:\t' + (details.news_url || 'None Provided'));
+    console.log('\tDescription:');
     console.log(details.description);
 };
 
@@ -115,7 +115,7 @@ export const history = async () => {
         console.log('Search Log Most to Least Recent');
         for (const search of searchHistory.reverse()) {
             console.log(
-                `\tSearch ${i++}\tKeyword: ${search.search}\tResult Count: ${
+                `\tSearch ${i++}\tKeyword: ${search.search}\t\tResult Count: ${
                     search.resultCount
                 }`
             );
